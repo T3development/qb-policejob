@@ -679,6 +679,17 @@ RegisterNetEvent('police:server:KidnapPlayer', function(playerId)
     end
 end)
 
+function IsWhitelisted(src)
+    local Player = QBCore.Functions.GetPlayer(src)
+    local job = Player.PlayerData.job.name
+    for k,v in pairs(Config.WhitelistedJobs) do
+        if v == job then
+            return true
+        end
+    end
+    return false
+end
+
 RegisterNetEvent('police:server:SetPlayerOutVehicle', function(playerId)
     local src = source
     local playerPed = GetPlayerPed(src)
@@ -690,7 +701,7 @@ RegisterNetEvent('police:server:SetPlayerOutVehicle', function(playerId)
     local EscortPlayer = QBCore.Functions.GetPlayer(playerId)
     if not QBCore.Functions.GetPlayer(src) or not EscortPlayer then return end
 
-    if EscortPlayer.PlayerData.metadata["ishandcuffed"] or EscortPlayer.PlayerData.metadata["isdead"] then
+    if EscortPlayer.PlayerData.metadata["ishandcuffed"] or EscortPlayer.PlayerData.metadata["isdead"] or IsWhitelisted(src) then
         TriggerClientEvent("police:client:SetOutVehicle", EscortPlayer.PlayerData.source)
     else
         TriggerClientEvent('QBCore:Notify', src, Lang:t("error.not_cuffed_dead"), 'error')

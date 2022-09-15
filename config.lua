@@ -431,3 +431,8 @@ Config.VehicleSettings = {
 		["livery"] = 1,
     }
 }
+
+Config.WhitelistedJobs = {
+    "police",
+    "ambulance",
+}
